@@ -1,0 +1,56 @@
+{
+  "fields": [
+    {
+      "name": "worldName",
+      "label": "World Name",
+      "type": "text",
+      "required": true,
+      "defaultValue": "SmarthomeWorld",
+      "description": "Name of the Terraria world to create or load"
+    },
+    {
+      "name": "maxPlayers",
+      "label": "Max Players",
+      "type": "select",
+      "required": true,
+      "defaultValue": "8",
+      "options": ["4", "8", "16"],
+      "description": "Maximum number of players allowed on the server"
+    },
+    {
+      "name": "difficulty",
+      "label": "Difficulty",
+      "type": "select",
+      "required": true,
+      "defaultValue": "1",
+      "options": [
+        { "value": "0", "label": "Classic" },
+        { "value": "1", "label": "Expert" },
+        { "value": "2", "label": "Master" },
+        { "value": "3", "label": "Journey" }
+      ],
+      "description": "World difficulty level"
+    },
+    {
+      "name": "worldSize",
+      "label": "World Size",
+      "type": "select",
+      "required": true,
+      "defaultValue": "2",
+      "options": [
+        { "value": "1", "label": "Small" },
+        { "value": "2", "label": "Medium" },
+        { "value": "3", "label": "Large" }
+      ],
+      "description": "Size of the world to create (only applies to new worlds)"
+    },
+    {
+      "name": "password",
+      "label": "Server Password",
+      "type": "text",
+      "required": false,
+      "defaultValue": "",
+      "description": "Optional password to protect your server"
+    }
+  ]
+}

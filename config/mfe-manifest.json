@@ -1,0 +1,14 @@
+{
+  "name": "terraria",
+  "displayName": "Terraria Server",
+  "description": "Host a Terraria multiplayer server. Players can connect from their Terraria game client to join your world.",
+  "remoteEntry": "/remoteEntry.json",
+  "remoteName": "terraria",
+  "exposedModule": "./Component",
+  "componentExport": "TerrariaComponent",
+  "tile": {
+    "label": "Terraria",
+    "icon": "sports_esports",
+    "color": "#05C46B"
+  }
+}

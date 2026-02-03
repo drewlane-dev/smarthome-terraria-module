@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: terraria-config
+  namespace: smarthome
+data:
+  worldname: "{{worldName}}"
+  maxplayers: "{{maxPlayers}}"
+  difficulty: "{{difficulty}}"
+  autocreate: "{{worldSize}}"
+  password: "{{password}}"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: terraria-worlds
+  namespace: smarthome
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terraria
+  namespace: smarthome
+  labels:
+    app: terraria
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: terraria
+  template:
+    metadata:
+      labels:
+        app: terraria
+    spec:
+      containers:
+        - name: terraria
+          image: hexlo/terraria-server-docker:latest
+          ports:
+            - containerPort: 7777
+              protocol: TCP
+          env:
+            - name: world
+              value: "/root/.local/share/Terraria/Worlds/{{worldName}}.wld"
+            - name: worldname
+              valueFrom:
+                configMapKeyRef:
+                  name: terraria-config
+                  key: worldname
+            - name: autocreate
+              valueFrom:
+                configMapKeyRef:
+                  name: terraria-config
+                  key: autocreate
+            - name: maxplayers
+              valueFrom:
+                configMapKeyRef:
+                  name: terraria-config
+                  key: maxplayers
+            - name: difficulty
+              valueFrom:
+                configMapKeyRef:
+                  name: terraria-config
+                  key: difficulty
+            - name: password
+              valueFrom:
+                configMapKeyRef:
+                  name: terraria-config
+                  key: password
+            - name: secure
+              value: "0"
+          stdin: true
+          tty: true
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+          volumeMounts:
+            - name: worlds
+              mountPath: /root/.local/share/Terraria/Worlds
+      volumes:
+        - name: worlds
+          persistentVolumeClaim:
+            claimName: terraria-worlds
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: terraria
+  namespace: smarthome
+spec:
+  type: NodePort
+  selector:
+    app: terraria
+  ports:
+    - port: 7777
+      targetPort: 7777
+      nodePort: 30777
+      protocol: TCP
