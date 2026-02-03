@@ -18,6 +18,7 @@ export interface ModuleStatus {
   podStatus?: string;
   mfePodStatus?: string;
   fieldValues?: Record<string, string>;
+  serviceNodePort?: number;
   message?: string;
 }
 

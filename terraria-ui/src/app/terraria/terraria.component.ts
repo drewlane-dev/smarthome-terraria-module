@@ -153,4 +153,10 @@ export class TerrariaComponent implements OnInit {
     }
     return value;
   }
+
+  getConnectionString(): string {
+    const host = window.location.hostname;
+    const port = this.moduleStatus?.serviceNodePort;
+    return port ? `${host}:${port}` : 'Unavailable';
+  }
 }
