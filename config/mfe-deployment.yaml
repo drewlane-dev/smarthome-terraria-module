@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
         - name: terraria-mfe
-          image: ghcr.io/drewlane-dev/smart-home-pi/terraria-ui:latest
+          image: terraria-mfe:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 80
           resources:

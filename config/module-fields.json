@@ -23,13 +23,8 @@
       "type": "select",
       "required": true,
       "defaultValue": "1",
-      "options": [
-        { "value": "0", "label": "Classic" },
-        { "value": "1", "label": "Expert" },
-        { "value": "2", "label": "Master" },
-        { "value": "3", "label": "Journey" }
-      ],
-      "description": "World difficulty level"
+      "options": ["0", "1", "2", "3"],
+      "description": "0=Classic, 1=Expert, 2=Master, 3=Journey"
     },
     {
       "name": "worldSize",
@@ -37,12 +32,8 @@
       "type": "select",
       "required": true,
       "defaultValue": "2",
-      "options": [
-        { "value": "1", "label": "Small" },
-        { "value": "2", "label": "Medium" },
-        { "value": "3", "label": "Large" }
-      ],
-      "description": "Size of the world to create (only applies to new worlds)"
+      "options": ["1", "2", "3"],
+      "description": "1=Small, 2=Medium, 3=Large (only applies to new worlds)"
     },
     {
       "name": "password",

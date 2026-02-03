@@ -1,0 +1,104 @@
+<div class="terraria-container">
+  <div class="terraria-header">
+    <span class="material-icons terraria-icon">sports_esports</span>
+    <h2>{{ moduleDefinition?.displayName || 'Terraria Server' }}</h2>
+  </div>
+
+  <div class="terraria-content">
+    @if (loading && !moduleStatus) {
+      <div class="loading-state">
+        <span class="material-icons spinning">sync</span>
+        <p>Loading...</p>
+      </div>
+    } @else if (moduleStatus?.serviceDeployed) {
+      <div class="status-section">
+        <div class="status-item">
+          <span class="status-label">Status:</span>
+          <span class="status-value" [class.running]="moduleStatus?.serviceRunning">
+            {{ moduleStatus?.serviceRunning ? 'Running' : 'Stopped' }}
+          </span>
+        </div>
+        @if (moduleStatus?.podStatus) {
+          <div class="status-item">
+            <span class="status-label">Pod:</span>
+            <span class="status-value">{{ moduleStatus?.podStatus }}</span>
+          </div>
+        }
+        @for (field of moduleDefinition?.fields; track field.name) {
+          @if (moduleStatus?.fieldValues?.[field.name] && field.name !== 'password') {
+            <div class="status-item">
+              <span class="status-label">{{ field.label }}:</span>
+              <span class="status-value">{{ getFieldDisplayValue(field, moduleStatus?.fieldValues?.[field.name] || '') }}</span>
+            </div>
+          }
+        }
+        <div class="status-item connection-info">
+          <span class="status-label">Connect:</span>
+          <span class="status-value highlight">192.168.4.37:7777</span>
+        </div>
+      </div>
+
+      @if (error) {
+        <div class="error-message">
+          <span class="material-icons">error</span>
+          {{ error }}
+        </div>
+      }
+
+      <button class="action-btn danger" (click)="remove()" [disabled]="loading">
+        @if (loading) {
+          <span class="material-icons spinning">sync</span>
+        } @else {
+          <span class="material-icons">delete</span>
+        }
+        Stop Server
+      </button>
+    } @else {
+      @if (moduleDefinition?.description) {
+        <p class="description">{{ moduleDefinition?.description }}</p>
+      }
+
+      @for (field of moduleDefinition?.fields; track field.name) {
+        <div class="form-group">
+          <label [for]="field.name">{{ field.label }}</label>
+          @if (field.type === 'select' && field.options) {
+            <select
+              [id]="field.name"
+              [(ngModel)]="fieldValues[field.name]"
+            >
+              @for (option of field.options; track getOptionValue(option)) {
+                <option [value]="getOptionValue(option)">{{ getOptionLabel(option, field.name) }}</option>
+              }
+            </select>
+          } @else {
+            <input
+              [type]="field.name === 'password' ? 'password' : field.type"
+              [id]="field.name"
+              [(ngModel)]="fieldValues[field.name]"
+              [placeholder]="field.defaultValue || ''"
+            />
+          }
+          @if (field.description) {
+            <span class="field-hint">{{ field.description }}</span>
+          }
+        </div>
+      }
+
+      @if (error) {
+        <div class="error-message">
+          <span class="material-icons">error</span>
+          {{ error }}
+        </div>
+      }
+
+      <button class="action-btn primary" (click)="deploy()" [disabled]="loading">
+        @if (loading) {
+          <span class="material-icons spinning">sync</span>
+        } @else {
+          <span class="material-icons">play_arrow</span>
+        }
+        Start Server
+      </button>
+    }
+  </div>
+</div>
