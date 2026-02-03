@@ -48,6 +48,20 @@ export interface DeployRequest {
   fieldValues: Record<string, string>;
 }
 
+export interface ServiceReadyResponse {
+  ready: boolean;
+  podStatus?: string;
+  nodePort?: number;
+  message?: string;
+}
+
+export interface PodLogsResponse {
+  success: boolean;
+  logs?: string;
+  timestamp: string;
+  error?: string;
+}
+
 function getApiUrl(): string {
   // Use shell's API URL if available (federated module context)
   if (window.__API_URL__) {
@@ -81,5 +95,21 @@ export class TerrariaService {
 
   remove(): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${this.moduleName}`);
+  }
+
+  checkServiceReady(): Observable<ServiceReadyResponse> {
+    return this.http.get<ServiceReadyResponse>(`${this.apiUrl}/${this.moduleName}/service-ready`);
+  }
+
+  getLogs(sinceSeconds?: number, tailLines?: number): Observable<PodLogsResponse> {
+    const params: string[] = [];
+    if (sinceSeconds) {
+      params.push(`sinceSeconds=${sinceSeconds}`);
+    }
+    if (tailLines) {
+      params.push(`tailLines=${tailLines}`);
+    }
+    const queryString = params.length > 0 ? `?${params.join('&')}` : '';
+    return this.http.get<PodLogsResponse>(`${this.apiUrl}/${this.moduleName}/logs${queryString}`);
   }
 }
