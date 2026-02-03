@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
 
 // Access shell's API URL when loaded as federated module
 declare global {
@@ -53,8 +52,8 @@ function getApiUrl(): string {
   if (window.__API_URL__) {
     return window.__API_URL__;
   }
-  // Fallback to environment for standalone development
-  return environment.apiUrl;
+  // Detect API URL from current host - API runs on port 5000
+  return `${window.location.protocol}//${window.location.hostname}:5000`;
 }
 
 @Injectable({
