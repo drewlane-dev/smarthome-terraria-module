@@ -10,18 +10,6 @@ data:
   autocreate: "{{worldSize}}"
   password: "{{password}}"
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: terraria-worlds
-  namespace: smarthome
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -91,8 +79,9 @@ spec:
               mountPath: /root/.local/share/Terraria/Worlds
       volumes:
         - name: worlds
-          persistentVolumeClaim:
-            claimName: terraria-worlds
+          hostPath:
+            path: "{{worldsPath}}"
+            type: DirectoryOrCreate
       restartPolicy: Always
 ---
 apiVersion: v1

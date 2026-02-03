@@ -1,6 +1,14 @@
 {
   "fields": [
     {
+      "name": "worldsPath",
+      "label": "Worlds Directory",
+      "type": "text",
+      "required": true,
+      "defaultValue": "/tmp/terraria-worlds",
+      "description": "Host path to store Terraria world files"
+    },
+    {
       "name": "worldName",
       "label": "World Name",
       "type": "text",
